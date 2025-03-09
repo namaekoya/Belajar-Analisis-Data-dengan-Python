@@ -1,0 +1,7 @@
+Please install library:
+
+pandas
+numpy
+matplotlib
+seaborn
+streamlit
