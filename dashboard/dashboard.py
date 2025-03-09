@@ -23,8 +23,8 @@ def hour_rent(df):
 
 
 st.title("Analisis Data Penyewaan Sepeda")
-st.image("https://www.holidify.com/images/cmsuploads/compressed/bike-rental-2284380_1920_20180518075038.jpg")
-st.caption("Image Source: https://www.holidify.com")
+st.image("https://assets.promediateknologi.id/crop/0x0:0x0/0x0/webp/photo/indizone/2022/03/09/Z8sPZ7J/pak-anies-tolong-sepeda-sewa-di-jakarta-kondisinya-memprihatinkan92.jpg")
+st.caption("Source: travel.indozone.id")
 
 hour_df = pd.read_csv('dashboard/hour.csv')
 hour_df["dteday"] = pd.to_datetime(hour_df["dteday"])
