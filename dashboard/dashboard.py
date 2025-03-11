@@ -5,7 +5,7 @@ import seaborn as sns
 import streamlit as st
 
 # Pastikan data sudah dimuat sebelumnya, misalnya day_df atau hour_df
-df = day_df  # Ganti dengan dataframe yang ingin difilter
+df = day.csv  # Ganti dengan dataframe yang ingin difilter
 
 # Konversi kolom tanggal ke format datetime jika belum
 df['dteday'] = pd.to_datetime(df['dteday'])
