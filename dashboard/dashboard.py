@@ -4,6 +4,27 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
 
+# Pastikan data sudah dimuat sebelumnya, misalnya day_df atau hour_df
+df = day_df  # Ganti dengan dataframe yang ingin difilter
+
+# Konversi kolom tanggal ke format datetime jika belum
+df['dteday'] = pd.to_datetime(df['dteday'])
+
+# Meminta input tanggal dari pengguna
+start_date = input("Masukkan tanggal awal (YYYY-MM-DD): ")
+end_date = input("Masukkan tanggal akhir (YYYY-MM-DD): ")
+
+# Konversi input string ke format datetime
+start_date = pd.to_datetime(start_date)
+end_date = pd.to_datetime(end_date)
+
+# Melakukan filtering data berdasarkan rentang tanggal
+filtered_df = df[(df['dteday'] >= start_date) & (df['dteday'] <= end_date)]
+
+# Menampilkan hasil filtering
+print("Data setelah difilter berdasarkan tanggal:")
+print(filtered_df.head())
+
 def monthly_rent(df):
     monthly_rent_df = df.resample(rule='M', on='dteday').agg({"cnt": "sum"})
     monthly_rent_df.index = monthly_rent_df.index.strftime('%B %Y')
