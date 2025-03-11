@@ -12,7 +12,7 @@ def monthly_rent(df):
     return monthly_rent_df
 
 def hour_rent(df):
-    hour_df["workingday"] = hour_df.workingday.apply(lambda x: "Workingday" if x == 1 else "Holiday" if x == 0 else x)
+    df["workingday"] = df.workingday.apply(lambda x: "Workingday" if x == 1 else "Holiday")
     
     sum_hour_workingday_df = df[df['workingday']=='Workingday'].groupby(["hr"]).cnt.mean().sort_values(ascending=False).reset_index()
     sum_hour_workingday_df['hr'] = list(map(lambda x: f'{x}:00', sum_hour_workingday_df.hr))
@@ -21,7 +21,6 @@ def hour_rent(df):
     sum_hour_holiday_df['hr'] = list(map(lambda x: f'{x}:00', sum_hour_holiday_df.hr))
     return sum_hour_workingday_df, sum_hour_holiday_df
 
-
 st.title("Analisis Data Penyewaan Sepeda")
 st.image("https://assets.promediateknologi.id/crop/0x0:0x0/0x0/webp/photo/indizone/2022/03/09/Z8sPZ7J/pak-anies-tolong-sepeda-sewa-di-jakarta-kondisinya-memprihatinkan92.jpg")
 st.caption("Source: travel.indozone.id")
@@ -29,7 +28,15 @@ st.caption("Source: travel.indozone.id")
 hour_df = pd.read_csv('dashboard/hour.csv')
 hour_df["dteday"] = pd.to_datetime(hour_df["dteday"])
 
+# Menambahkan filter berdasarkan rentang tanggal
+st.sidebar.header("Filter Tanggal")
+start_date = st.sidebar.date_input("Mulai", hour_df["dteday"].min())
+end_date = st.sidebar.date_input("Selesai", hour_df["dteday"].max())
 
+if start_date > end_date:
+    st.sidebar.error("Tanggal mulai tidak boleh lebih besar dari tanggal selesai")
+else:
+    hour_df = hour_df[(hour_df["dteday"] >= pd.to_datetime(start_date)) & (hour_df["dteday"] <= pd.to_datetime(end_date))]
 
 st.header("Jumlah Sewa Bulanan")
 monthly_rent_df = monthly_rent(hour_df)
@@ -67,7 +74,6 @@ ax[0][0].set_title("Best Performing Hour on Workingday", loc="center", fontsize=
 ax[0][0].tick_params(axis ='y', labelsize=12)
 
 sns.barplot(x="cnt", y="hr", data=sum_hour_workingday_df.sort_values(by="cnt", ascending=True).head(5), palette=colors, ax=ax[0][1])
-
 ax[0][1].set_ylabel(None)
 ax[0][1].set_xlabel(None)
 ax[0][1].invert_xaxis()
